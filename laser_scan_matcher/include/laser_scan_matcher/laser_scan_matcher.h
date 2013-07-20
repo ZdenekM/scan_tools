@@ -52,6 +52,7 @@
 #include <pcl/point_cloud.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl_ros/point_cloud.h>
+#include <boost/assign/list_of.hpp>
 
 #include <csm/csm_all.h>  // csm defines min and max, but Eigen complains
 #undef min 
@@ -91,6 +92,7 @@ class LaserScanMatcher
 
     ros::Publisher  pose_publisher_;
     ros::Publisher  pose_stamped_publisher_;
+    ros::Publisher  odom_publisher_;
 
     // **** parameters
 
@@ -102,6 +104,9 @@ class LaserScanMatcher
     bool publish_tf_;
     bool publish_pose_;
     bool publish_pose_stamped_;
+    bool publish_odom_;
+    double odom_cov_x_;
+    double odom_cov_y_;
 
     bool use_cloud_input_;
 

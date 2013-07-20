@@ -76,6 +76,12 @@ LaserScanMatcher::LaserScanMatcher(ros::NodeHandle nh, ros::NodeHandle nh_privat
       "pose_stamped", 5);
   }
 
+  if (publish_odom_)
+    {
+      odom_publisher_ = nh_.advertise<nav_msgs::Odometry>(
+        "odom", 5);
+    }
+
   // *** subscribers
 
   if (use_cloud_input_)
@@ -161,6 +167,18 @@ void LaserScanMatcher::initParams()
   if (!nh_private_.getParam ("use_vel", use_vel_))
     use_vel_ = false;
 
+  double tmp;
+
+  if (!nh_private_.getParam ("odom_stdev_x", tmp))
+      tmp = 0.1;
+
+  odom_cov_x_ = tmp*tmp;
+
+  if (!nh_private_.getParam ("odom_stdev_y", tmp))
+        tmp = 0.1;
+
+    odom_cov_y_ = tmp*tmp;
+
   // **** How to publish the output?
   // tf (fixed_frame->base_frame), 
   // pose message (pose of base frame in the fixed frame)
@@ -171,6 +189,8 @@ void LaserScanMatcher::initParams()
     publish_pose_ = true;
   if (!nh_private_.getParam ("publish_pose_stamped", publish_pose_stamped_))
     publish_pose_stamped_ = false;
+  if (!nh_private_.getParam ("publish_odom", publish_odom_))
+      publish_odom_ = false;
 
   // **** CSM parameters - comments copied from algos.h (by Andrea Censi)
 
@@ -460,6 +480,29 @@ void LaserScanMatcher::processScan(LDP& curr_ldp_scan, const ros::Time& time)
       tf::poseTFToMsg(f2b_, pose_stamped_msg->pose);
 
       pose_stamped_publisher_.publish(pose_stamped_msg);
+    }
+    if (publish_odom_) {
+
+    	nav_msgs::Odometry::Ptr odom_msg;
+    	odom_msg = boost::make_shared<nav_msgs::Odometry>();
+
+    	odom_msg->header.stamp = time;
+    	odom_msg->header.frame_id = fixed_frame_;
+    	odom_msg->child_frame_id = base_frame_;
+
+    	tf::poseTFToMsg(f2b_, odom_msg->pose.pose);
+
+    	odom_msg->pose.covariance = boost::assign::list_of
+
+    			(odom_cov_x_) (0) 			 (0)  	(0)    (0)    (0)
+                (0)           (odom_cov_y_)  (0)  	(0)    (0)    (0)
+                (0)   		  (0)  			 (1e6) 	(0)    (0)    (0)
+                (0)           (0)   		 (0) 	(1e6)  (0)    (0)
+                (0)           (0)   		 (0)  	(0)    (1e6)  (0)
+                (0)           (0)   		 (0)  	(0)    (0)    (1e6) ;
+
+    	odom_publisher_.publish(odom_msg);
+
     }
     if (publish_tf_)
     {
