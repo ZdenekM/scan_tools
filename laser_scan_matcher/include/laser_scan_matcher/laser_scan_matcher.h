@@ -107,6 +107,7 @@ class LaserScanMatcher
     bool publish_odom_;
     double odom_cov_x_;
     double odom_cov_y_;
+    double odom_cov_th_;
 
     bool use_cloud_input_;
 

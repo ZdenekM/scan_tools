@@ -179,6 +179,11 @@ void LaserScanMatcher::initParams()
 
     odom_cov_y_ = tmp*tmp;
 
+  if (!nh_private_.getParam ("odom_stdev_th", tmp))
+		tmp = 0.1;
+
+	odom_cov_th_ = tmp*tmp;
+
   // **** How to publish the output?
   // tf (fixed_frame->base_frame), 
   // pose message (pose of base frame in the fixed frame)
@@ -494,12 +499,12 @@ void LaserScanMatcher::processScan(LDP& curr_ldp_scan, const ros::Time& time)
 
     	odom_msg->pose.covariance = boost::assign::list_of
 
-    			(odom_cov_x_) (0) 			 (0)  	(0)    (0)    (0)
-                (0)           (odom_cov_y_)  (0)  	(0)    (0)    (0)
-                (0)   		  (0)  			 (1e6) 	(0)    (0)    (0)
-                (0)           (0)   		 (0) 	(1e6)  (0)    (0)
-                (0)           (0)   		 (0)  	(0)    (1e6)  (0)
-                (0)           (0)   		 (0)  	(0)    (0)    (1e6) ;
+    			(odom_cov_x_) (0) 			 (0)  	(0)    (0)    (0) 				// pos x
+                (0)           (odom_cov_y_)  (0)  	(0)    (0)    (0) 				// pos y
+                (0)   		  (0)  			 (1e6) 	(0)    (0)    (0) 				// pos z
+                (0)           (0)   		 (0) 	(1e6)  (0)    (0) 				// rot x
+                (0)           (0)   		 (0)  	(0)    (1e6)  (0)				// rot y
+                (0)           (0)   		 (0)  	(0)    (0)    (odom_cov_th_) ;	// rot z
 
     	odom_publisher_.publish(odom_msg);
 
