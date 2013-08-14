@@ -48,10 +48,10 @@
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
 #include <tf/transform_broadcaster.h>
-#include <pcl/point_types.h>
+/*#include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl/filters/voxel_grid.h>
-#include <pcl_ros/point_cloud.h>
+#include <pcl_ros/point_cloud.h>*/
 
 #include <csm/csm_all.h>  // csm defines min and max, but Eigen complains
 #undef min 
@@ -69,8 +69,8 @@ class LaserScanMatcher
 
   private:
 
-    typedef pcl::PointXYZ           PointT;
-    typedef pcl::PointCloud<PointT> PointCloudT;
+    /*typedef pcl::PointXYZ           PointT;
+    typedef pcl::PointCloud<PointT> PointCloudT;*/
 
     // **** ros  
 
@@ -154,11 +154,11 @@ class LaserScanMatcher
 
     void laserScanToLDP(const sensor_msgs::LaserScan::ConstPtr& scan_msg,
                               LDP& ldp);
-    void PointCloudToLDP(const PointCloudT::ConstPtr& cloud,
-                               LDP& ldp);
+    //void PointCloudToLDP(const PointCloudT::ConstPtr& cloud,
+    //                           LDP& ldp);
 
     void scanCallback (const sensor_msgs::LaserScan::ConstPtr& scan_msg);
-    void cloudCallback (const PointCloudT::ConstPtr& cloud);
+    //void cloudCallback (const PointCloudT::ConstPtr& cloud);
 
     void odomCallback(const nav_msgs::Odometry::ConstPtr& odom_msg);
     void imuCallback (const sensor_msgs::Imu::ConstPtr& imu_msg);

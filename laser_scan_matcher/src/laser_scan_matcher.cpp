@@ -80,8 +80,8 @@ LaserScanMatcher::LaserScanMatcher(ros::NodeHandle nh, ros::NodeHandle nh_privat
 
   if (use_cloud_input_)
   {
-    cloud_subscriber_ = nh_.subscribe(
-      "cloud", 1, &LaserScanMatcher::cloudCallback, this);
+    /*cloud_subscriber_ = nh_.subscribe(
+      "cloud", 1, &LaserScanMatcher::cloudCallback, this);*/
   }
   else
   {
@@ -321,7 +321,7 @@ void LaserScanMatcher::velCallback(const geometry_msgs::TwistStamped::ConstPtr& 
   received_vel_ = true;
 }
 
-void LaserScanMatcher::cloudCallback (const PointCloudT::ConstPtr& cloud)
+/*void LaserScanMatcher::cloudCallback (const PointCloudT::ConstPtr& cloud)
 {
   // **** if first scan, cache the tf from base to the scanner
 
@@ -342,7 +342,7 @@ void LaserScanMatcher::cloudCallback (const PointCloudT::ConstPtr& cloud)
   LDP curr_ldp_scan;
   PointCloudToLDP(cloud, curr_ldp_scan);
   processScan(curr_ldp_scan, cloud->header.stamp);
-}
+}*/
 
 void LaserScanMatcher::scanCallback (const sensor_msgs::LaserScan::ConstPtr& scan_msg)
 {
@@ -506,7 +506,7 @@ bool LaserScanMatcher::newKeyframeNeeded(const tf::Transform& d)
   return false;
 }
 
-void LaserScanMatcher::PointCloudToLDP(const PointCloudT::ConstPtr& cloud,
+/*void LaserScanMatcher::PointCloudToLDP(const PointCloudT::ConstPtr& cloud,
                                              LDP& ldp)
 {
   double max_d2 = cloud_res_ * cloud_res_;
@@ -573,7 +573,7 @@ void LaserScanMatcher::PointCloudToLDP(const PointCloudT::ConstPtr& cloud,
   ldp->true_pose[0] = 0.0;
   ldp->true_pose[1] = 0.0;
   ldp->true_pose[2] = 0.0;
-}
+}*/
 
 void LaserScanMatcher::laserScanToLDP(const sensor_msgs::LaserScan::ConstPtr& scan_msg,
                                             LDP& ldp)

@@ -13,7 +13,8 @@
   <depend package="nodelet"/>
   <depend package="sensor_msgs"/>
   <depend package="tf"/>
-  <depend package="pcl"/>
+  <!--depend package="pcl"/-->
+  <depend package="pcl_conversions"/>
   <depend package="pcl_ros"/>
   <depend package="geometry_msgs"/>
   <depend package="nav_msgs"/>
