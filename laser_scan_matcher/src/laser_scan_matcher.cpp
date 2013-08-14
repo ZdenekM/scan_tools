@@ -79,7 +79,7 @@ LaserScanMatcher::LaserScanMatcher(ros::NodeHandle nh, ros::NodeHandle nh_privat
   if (publish_odom_)
     {
       odom_publisher_ = nh_.advertise<nav_msgs::Odometry>(
-        "odom", 5);
+        "odom_out", 5);
     }
 
   // *** subscribers
